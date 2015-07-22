@@ -55,7 +55,9 @@ class FeedReaderService extends RestfulService {
     }
 
     private function _addAtom1Items($response) {
-        foreach ($response->xpath('//feed/entry') as $node) {
+        // foreach ($response->xpath('//feed/entry') as $node) {
+        // fix Xpath expression for Atom: http://stackoverflow.com/questions/6299201/simple-xpath-question-that-drives-me-crazy
+        foreach ($response->xpath("//channel/item | /*[local-name()='feed' and namespace-uri()='http://www.w3.org/2005/Atom'] /*[local-name()='entry' and namespace-uri()='http://www.w3.org/2005/Atom']") as $node) {
             $summary = (string) $node->summary;
             $content = (string) $node->content;
             $row = new ArrayData(array(
